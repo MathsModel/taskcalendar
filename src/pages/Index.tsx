@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
-import { startOfDay } from 'date-fns';
-import { Loader2, Lock, Unlock } from 'lucide-react';
+import { startOfDay, startOfWeek, parseISO } from 'date-fns';
+import { Loader2, Lock, Unlock, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CalendarGrid } from '@/components/CalendarGrid';
 import { TaskSidebar } from '@/components/TaskSidebar';
@@ -37,6 +37,32 @@ const Index = () => {
       toast.error('Failed to load tasks');
     }
   }, [tasksError]);
+
+  // Calculate the earliest week we can scroll to
+  const minWeekOffset = useMemo(() => {
+    const currentWeekStart = startOfWeek(today, { weekStartsOn: 1 });
+    
+    let earliestDate: Date | null = null;
+    if (tasks.length > 0) {
+      const taskDates = tasks.map(t => parseISO(t.start_date));
+      earliestDate = taskDates.reduce((earliest, date) => 
+        date < earliest ? date : earliest
+      , taskDates[0]);
+    }
+    
+    const minDefaultOffset = -6;
+    
+    if (earliestDate) {
+      const earliestWeekStart = startOfWeek(earliestDate, { weekStartsOn: 1 });
+      const weeksBack = Math.floor((currentWeekStart.getTime() - earliestWeekStart.getTime()) / (7 * 24 * 60 * 60 * 1000));
+      return Math.min(minDefaultOffset, -(weeksBack + 3));
+    }
+    
+    return minDefaultOffset;
+  }, [tasks, today]);
+
+  const canScrollBack = weekOffset > minWeekOffset;
+  const canScrollForward = weekOffset < 0;
 
   const handleAddTask = (task: {
     title: string;
@@ -110,24 +136,42 @@ const Index = () => {
       {/* Header */}
       <header className="flex items-center justify-between px-6 py-4 border-b border-border bg-card">
         <h1 className="text-xl font-bold">Task Calendar</h1>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleToggleCalendarLock}
-          className="gap-2"
-        >
-          {isCalendarLocked ? (
+        <div className="flex items-center gap-1">
+          {!isCalendarLocked && (
             <>
-              <Lock className="h-4 w-4" />
-              <span className="text-xs">Locked</span>
-            </>
-          ) : (
-            <>
-              <Unlock className="h-4 w-4" />
-              <span className="text-xs">Unlocked</span>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => handleChangeWeekOffset(weekOffset - 1)}
+                disabled={!canScrollBack}
+                className="h-8 w-8"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => handleChangeWeekOffset(weekOffset + 1)}
+                disabled={!canScrollForward}
+                className="h-8 w-8"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
             </>
           )}
-        </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleToggleCalendarLock}
+            className="h-8 w-8"
+          >
+            {isCalendarLocked ? (
+              <Lock className="h-4 w-4" />
+            ) : (
+              <Unlock className="h-4 w-4" />
+            )}
+          </Button>
+        </div>
       </header>
 
       {/* Main Content */}
@@ -148,10 +192,7 @@ const Index = () => {
                 tasks={tasks}
                 completions={completions}
                 skips={skips}
-                isLocked={isCalendarLocked}
-                onToggleLock={handleToggleCalendarLock}
                 weekOffset={weekOffset}
-                onChangeWeekOffset={handleChangeWeekOffset}
               />
             )}
           </div>
