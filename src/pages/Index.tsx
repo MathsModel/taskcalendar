@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { startOfDay } from 'date-fns';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Lock, Unlock } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { CalendarGrid } from '@/components/CalendarGrid';
 import { TaskSidebar } from '@/components/TaskSidebar';
 import { useTasks, useTaskCompletions, useTaskSkips, useAddTask, useDeleteTask, useToggleCompletion, useUpdateTask, useSkipTaskForDate, useReorderTasks } from '@/hooks/useTasks';
@@ -107,10 +108,26 @@ const Index = () => {
   return (
     <div className="flex flex-col h-screen bg-background">
       {/* Header */}
-      <header className="flex items-center gap-3 px-6 py-4 border-b border-border bg-card">
-        <div>
-          <h1 className="text-xl font-bold">Task Calendar</h1>
-        </div>
+      <header className="flex items-center justify-between px-6 py-4 border-b border-border bg-card">
+        <h1 className="text-xl font-bold">Task Calendar</h1>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleToggleCalendarLock}
+          className="gap-2"
+        >
+          {isCalendarLocked ? (
+            <>
+              <Lock className="h-4 w-4" />
+              <span className="text-xs">Locked</span>
+            </>
+          ) : (
+            <>
+              <Unlock className="h-4 w-4" />
+              <span className="text-xs">Unlocked</span>
+            </>
+          )}
+        </Button>
       </header>
 
       {/* Main Content */}
