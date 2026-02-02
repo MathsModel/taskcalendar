@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { addDays, startOfWeek, startOfDay, parseISO, min } from 'date-fns';
-import { ChevronLeft, ChevronRight, Lock, Unlock } from 'lucide-react';
+import { addDays, startOfWeek, startOfDay, parseISO } from 'date-fns';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CalendarDay } from './CalendarDay';
 import { Task, TaskCompletion, TaskSkip, getDayProgress } from '@/hooks/useTasks';
@@ -80,54 +80,29 @@ export function CalendarGrid({
   return (
     <div className="p-6 h-full flex flex-col">
       {/* Navigation Controls */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          {!isLocked && (
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => onChangeWeekOffset(weekOffset - 1)}
-              disabled={!canScrollBack}
-              className="h-8 w-8"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-          )}
+      {!isLocked && (
+        <div className="flex items-center justify-between mb-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => onChangeWeekOffset(weekOffset - 1)}
+            disabled={!canScrollBack}
+            className="h-8 w-8"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => onChangeWeekOffset(weekOffset + 1)}
+            disabled={!canScrollForward}
+            className="h-8 w-8"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
         </div>
-        
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onToggleLock}
-          className="gap-2"
-        >
-          {isLocked ? (
-            <>
-              <Lock className="h-4 w-4" />
-              <span className="text-xs">Locked</span>
-            </>
-          ) : (
-            <>
-              <Unlock className="h-4 w-4" />
-              <span className="text-xs">Unlocked</span>
-            </>
-          )}
-        </Button>
-        
-        <div className="flex items-center gap-2">
-          {!isLocked && (
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => onChangeWeekOffset(weekOffset + 1)}
-              disabled={!canScrollForward}
-              className="h-8 w-8"
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          )}
-        </div>
-      </div>
+      )}
 
       {/* Day headers */}
       <div className="grid grid-cols-7 gap-3 mb-3">
