@@ -125,17 +125,15 @@ export function SortableTaskItem({
         )}
       </div>
 
-      {/* Actions - hidden on past days */}
-      {!isPast && (
-        <div className="flex flex-shrink-0 self-start gap-1">
-          <EditTaskDialog task={task} onEdit={onEdit} />
-          <DeleteTaskDialog
-            task={task}
-            onDeleteAll={onDeleteAll}
-            onDeleteToday={onDeleteToday}
-          />
-        </div>
-      )}
+      {/* Actions */}
+      <div className="flex flex-shrink-0 self-start gap-1">
+        <EditTaskDialog task={task} onEdit={onEdit} />
+        <DeleteTaskDialog
+          task={task}
+          onDeleteAll={onDeleteAll}
+          onDeleteToday={onDeleteToday}
+        />
+      </div>
     </div>
   );
 }
