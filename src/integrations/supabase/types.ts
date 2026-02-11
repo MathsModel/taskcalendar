@@ -75,6 +75,7 @@ export type Database = {
       tasks: {
         Row: {
           created_at: string
+          end_date: string | null
           id: string
           repeat_day: number | null
           repeat_type: string
@@ -84,6 +85,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          end_date?: string | null
           id?: string
           repeat_day?: number | null
           repeat_type?: string
@@ -93,6 +95,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          end_date?: string | null
           id?: string
           repeat_day?: number | null
           repeat_type?: string

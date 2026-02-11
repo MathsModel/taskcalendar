@@ -11,6 +11,7 @@ interface SortableTaskItemProps {
   isCompleted: boolean;
   onToggle: () => void;
   onDeleteAll: () => void;
+  onEndTask: () => void;
   onDeleteToday: () => void;
   onEdit: (taskId: string, updates: {
     title: string;
@@ -28,6 +29,7 @@ export function SortableTaskItem({
   isCompleted, 
   onToggle, 
   onDeleteAll, 
+  onEndTask,
   onDeleteToday, 
   onEdit, 
   canComplete,
@@ -131,6 +133,7 @@ export function SortableTaskItem({
         <DeleteTaskDialog
           task={task}
           onDeleteAll={onDeleteAll}
+          onEndTask={onEndTask}
           onDeleteToday={onDeleteToday}
         />
       </div>

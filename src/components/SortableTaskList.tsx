@@ -25,6 +25,7 @@ interface SortableTaskListProps {
   isPast: boolean;
   onToggleCompletion: (taskId: string, isCompleted: boolean) => void;
   onDeleteAll: (taskId: string) => void;
+  onEndTask: (taskId: string) => void;
   onDeleteToday: (taskId: string) => void;
   onEdit: (taskId: string, updates: {
     title: string;
@@ -43,6 +44,7 @@ export function SortableTaskList({
   isPast,
   onToggleCompletion,
   onDeleteAll,
+  onEndTask,
   onDeleteToday,
   onEdit,
   onReorder,
@@ -110,6 +112,7 @@ export function SortableTaskList({
                 isCompleted={isCompleted}
                 onToggle={() => onToggleCompletion(task.id, isCompleted)}
                 onDeleteAll={() => onDeleteAll(task.id)}
+                onEndTask={() => onEndTask(task.id)}
                 onDeleteToday={() => onDeleteToday(task.id)}
                 onEdit={onEdit}
                 canComplete={!isFuture}

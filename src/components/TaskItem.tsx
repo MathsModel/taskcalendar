@@ -9,6 +9,7 @@ interface TaskItemProps {
   isCompleted: boolean;
   onToggle: () => void;
   onDeleteAll: () => void;
+  onEndTask: () => void;
   onDeleteToday: () => void;
   onEdit: (taskId: string, updates: {
     title: string;
@@ -20,7 +21,7 @@ interface TaskItemProps {
 
 const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-export function TaskItem({ task, isCompleted, onToggle, onDeleteAll, onDeleteToday, onEdit, canComplete }: TaskItemProps) {
+export function TaskItem({ task, isCompleted, onToggle, onDeleteAll, onEndTask, onDeleteToday, onEdit, canComplete }: TaskItemProps) {
   const getRepeatLabel = () => {
     if (task.repeat_type === 'daily') return 'Every day';
     if (task.repeat_type === 'weekly' && task.repeat_day !== null) {
@@ -90,6 +91,7 @@ export function TaskItem({ task, isCompleted, onToggle, onDeleteAll, onDeleteTod
         <DeleteTaskDialog
           task={task}
           onDeleteAll={onDeleteAll}
+          onEndTask={onEndTask}
           onDeleteToday={onDeleteToday}
         />
       </div>
