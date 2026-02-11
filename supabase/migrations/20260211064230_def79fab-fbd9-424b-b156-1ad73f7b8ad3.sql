@@ -1,0 +1,1 @@
+ALTER TABLE public.tasks ADD COLUMN end_date date DEFAULT NULL;

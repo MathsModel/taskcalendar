@@ -7,6 +7,7 @@ export interface Task {
   title: string;
   created_at: string;
   start_date: string;
+  end_date: string | null;
   repeat_type: 'none' | 'daily' | 'weekly' | 'fortnightly';
   repeat_day: number | null;
   sort_order: number;
@@ -167,6 +168,24 @@ export function useDeleteTask() {
   });
 }
 
+export function useEndTask() {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: async ({ taskId, endDate }: { taskId: string; endDate: string }) => {
+      const { error } = await supabase
+        .from('tasks')
+        .update({ end_date: endDate } as any)
+        .eq('id', taskId);
+      
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
+    },
+  });
+}
+
 export function useReorderTasks() {
   const queryClient = useQueryClient();
   
@@ -299,6 +318,14 @@ export function getTasksForDate(tasks: Task[], date: Date, today: Date, skips: T
     // Task shouldn't appear before its start date (recurring tasks only go forward)
     if (isAfter(startDate, date) && !isSameDay(startDate, date)) {
       return false;
+    }
+
+    // Task shouldn't appear on or after its end date
+    if (task.end_date) {
+      const endDate = parseISO(task.end_date);
+      if (isAfter(date, endDate) || isSameDay(date, endDate)) {
+        return false;
+      }
     }
     
     // Non-repeating tasks only show on their start date

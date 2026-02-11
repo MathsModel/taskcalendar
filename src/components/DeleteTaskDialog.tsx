@@ -17,15 +17,21 @@ import { Task } from '@/hooks/useTasks';
 interface DeleteTaskDialogProps {
   task: Task;
   onDeleteAll: () => void;
+  onEndTask: () => void;
   onDeleteToday: () => void;
 }
 
-export function DeleteTaskDialog({ task, onDeleteAll, onDeleteToday }: DeleteTaskDialogProps) {
+export function DeleteTaskDialog({ task, onDeleteAll, onEndTask, onDeleteToday }: DeleteTaskDialogProps) {
   const [open, setOpen] = useState(false);
   const isRepeating = task.repeat_type !== 'none';
 
   const handleDeleteAll = () => {
     onDeleteAll();
+    setOpen(false);
+  };
+
+  const handleEndTask = () => {
+    onEndTask();
     setOpen(false);
   };
 
@@ -62,7 +68,7 @@ export function DeleteTaskDialog({ task, onDeleteAll, onDeleteToday }: DeleteTas
                 Just Today
               </Button>
               <AlertDialogAction
-                onClick={handleDeleteAll}
+                onClick={handleEndTask}
                 className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
               >
                 Delete All Future

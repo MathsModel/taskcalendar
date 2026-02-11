@@ -19,6 +19,7 @@ interface TaskSidebarProps {
   }) => void;
   onToggleCompletion: (taskId: string, isCompleted: boolean) => void;
   onDeleteTask: (taskId: string) => void;
+  onEndTask: (taskId: string) => void;
   onSkipTaskForToday: (taskId: string) => void;
   onEditTask: (taskId: string, updates: {
     title: string;
@@ -37,6 +38,7 @@ export function TaskSidebar({
   onAddTask,
   onToggleCompletion,
   onDeleteTask,
+  onEndTask,
   onSkipTaskForToday,
   onEditTask,
   onReorderTasks,
@@ -99,6 +101,7 @@ export function TaskSidebar({
             isPast={isPast}
             onToggleCompletion={onToggleCompletion}
             onDeleteAll={onDeleteTask}
+            onEndTask={onEndTask}
             onDeleteToday={onSkipTaskForToday}
             onEdit={onEditTask}
             onReorder={onReorderTasks}

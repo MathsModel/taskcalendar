@@ -1,10 +1,10 @@
 import { useState, useMemo, useEffect } from 'react';
-import { startOfDay, startOfWeek, parseISO } from 'date-fns';
+import { startOfDay, startOfWeek, parseISO, format } from 'date-fns';
 import { Loader2, Lock, Unlock, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CalendarGrid } from '@/components/CalendarGrid';
 import { TaskSidebar } from '@/components/TaskSidebar';
-import { useTasks, useTaskCompletions, useTaskSkips, useAddTask, useDeleteTask, useToggleCompletion, useUpdateTask, useSkipTaskForDate, useReorderTasks } from '@/hooks/useTasks';
+import { useTasks, useTaskCompletions, useTaskSkips, useAddTask, useDeleteTask, useToggleCompletion, useUpdateTask, useSkipTaskForDate, useReorderTasks, useEndTask } from '@/hooks/useTasks';
 import { toast } from 'sonner';
 
 const Index = () => {
@@ -31,6 +31,7 @@ const Index = () => {
   const updateTask = useUpdateTask();
   const skipTask = useSkipTaskForDate();
   const reorderTasks = useReorderTasks();
+  const endTask = useEndTask();
 
   useEffect(() => {
     if (tasksError) {
@@ -80,6 +81,14 @@ const Index = () => {
     deleteTask.mutate(taskId, {
       onSuccess: () => toast.success('Task deleted'),
       onError: () => toast.error('Failed to delete task')
+    });
+  };
+
+  const handleEndTask = (taskId: string) => {
+    const dateStr = format(selectedDate, 'yyyy-MM-dd');
+    endTask.mutate({ taskId, endDate: dateStr }, {
+      onSuccess: () => toast.success('Future occurrences removed'),
+      onError: () => toast.error('Failed to update task')
     });
   };
 
@@ -214,6 +223,7 @@ const Index = () => {
               onAddTask={handleAddTask}
               onToggleCompletion={handleToggleCompletion}
               onDeleteTask={handleDeleteTask}
+              onEndTask={handleEndTask}
               onSkipTaskForToday={handleSkipTaskForToday}
               onEditTask={handleEditTask}
               onReorderTasks={handleReorderTasks}
