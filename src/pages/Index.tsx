@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { startOfDay, startOfWeek, parseISO, format } from 'date-fns';
-import { Loader2, Lock, Unlock, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Loader2, Lock, Unlock, ChevronLeft, ChevronRight, LogOut } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { CalendarGrid } from '@/components/CalendarGrid';
 import { TaskSidebar } from '@/components/TaskSidebar';
@@ -8,6 +9,7 @@ import { useTasks, useTaskCompletions, useTaskSkips, useAddTask, useDeleteTask, 
 import { toast } from 'sonner';
 
 const Index = () => {
+  const { signOut } = useAuth();
   const today = useMemo(() => startOfDay(new Date()), []);
   const [selectedDate, setSelectedDate] = useState(today);
   const [isCalendarLocked, setIsCalendarLocked] = useState(true);
@@ -179,6 +181,15 @@ const Index = () => {
             ) : (
               <Unlock className="h-4 w-4" />
             )}
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={signOut}
+            className="h-8 w-8"
+            title="Sign out"
+          >
+            <LogOut className="h-4 w-4" />
           </Button>
         </div>
       </header>
