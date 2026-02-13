@@ -20,18 +20,21 @@ export type Database = {
           completed_date: string
           id: string
           task_id: string
+          user_id: string
         }
         Insert: {
           completed_at?: string
           completed_date: string
           id?: string
           task_id: string
+          user_id?: string
         }
         Update: {
           completed_at?: string
           completed_date?: string
           id?: string
           task_id?: string
+          user_id?: string
         }
         Relationships: [
           {
@@ -49,18 +52,21 @@ export type Database = {
           id: string
           skipped_date: string
           task_id: string
+          user_id: string
         }
         Insert: {
           created_at?: string
           id?: string
           skipped_date: string
           task_id: string
+          user_id?: string
         }
         Update: {
           created_at?: string
           id?: string
           skipped_date?: string
           task_id?: string
+          user_id?: string
         }
         Relationships: [
           {
@@ -82,6 +88,7 @@ export type Database = {
           sort_order: number
           start_date: string
           title: string
+          user_id: string
         }
         Insert: {
           created_at?: string
@@ -92,6 +99,7 @@ export type Database = {
           sort_order?: number
           start_date: string
           title: string
+          user_id?: string
         }
         Update: {
           created_at?: string
@@ -102,6 +110,7 @@ export type Database = {
           sort_order?: number
           start_date?: string
           title?: string
+          user_id?: string
         }
         Relationships: []
       }
